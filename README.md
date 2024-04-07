@@ -10,38 +10,43 @@ Useful when you want to run a GitHub Actions workflow when changes are made in S
 
 ## Usage
 
-1 - Ensure your GitHub Actions workflow file handles the "repository_dispatch" event with your custom type:
+1. Ensure your GitHub Actions workflow file handles the "repository_dispatch" event with your custom type:
 
-```yml
-name: Deploy
-on:
-  repository_dispatch:
-    types: [strapi_updated]
-```
+    ```yml
+    name: Deploy
+    on:
+        repository_dispatch:
+        types: [strapi_updated]
+    ```
 
-2 - Create a GitHub Personal access token with `repo` scope
+1. Create a GitHub Personal access token with `repo` scope and add it to .env file
 
-3 - Deploy the service to your server, for example:
+    ```bash
+    echo "GITHUB_TOKEN=<token>" > .env
+    ```
 
-```bash
-docker run \
-  --publish 5000:5000 \
-  --env GITHUB_TOKEN=YOURTOKEN \
-  ghcr.io/badsyntax/strapi-webhook-actions-proxy:latest
-```
+1. Deploy the service to your server, for example:
+
+    ```bash
+    # Use Docker compose
+    docker compose up --detach
+
+    # Run manually
+    docker run --publish 5000:5000 --env GITHUB_TOKEN=<token> proxy
+    ```
 
 (View [available docker tags](https://github.com/users/badsyntax/packages/container/package/strapi-webhook-actions-proxy), or just use `latest`.)
 
-4 - Create a new Webhook in Strapi that points to the service with the following query params:
+1. Create a new Webhook in Strapi that points to the service with the following query params:
 
 - `event_type`: Any string. This value must match the `repository_dispatch` type specified in your GitHub Actions workflow file.
 - `repo`: GitHub `username/repo`
 
 For example:
 
-```
-http://actions-proxy:5000/api?event_type=strapi_updated&repo=username/awesome-website
-```
+    ```
+    http://actions-proxy:5000/api?event_type=strapi_updated&repo=username/awesome-website
+    ```
 
 ## Background
 

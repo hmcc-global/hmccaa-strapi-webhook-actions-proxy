@@ -9,8 +9,8 @@
   "eslint.validate": ["javascript", "typescript"],
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "source.organizeImports": false
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
   },
   "[typescript]": {
     "editor.formatOnSave": false
